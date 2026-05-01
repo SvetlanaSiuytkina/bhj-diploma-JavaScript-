@@ -4,6 +4,8 @@
  * после авторизации или его выхода из системы
  * */
 
+const { response } = require("express");
+
 class UserWidget {
   /**
    * Устанавливает полученный элемент
@@ -12,7 +14,10 @@ class UserWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element){
-
+    if (!element) {
+      throw new Error("Ошибка: передан пустой элемент");
+    }
+    this.element = element;
   }
 
   /**
@@ -22,7 +27,24 @@ class UserWidget {
    * в элемент .user-name устанавливает имя
    * авторизованного пользователя
    * */
-  update(){
+  update() {
+    User.current().then(response => {
+      if (response.success && response.data) {
+        const userNameElement = this.element.querySelector(".user-name");
 
+        if (userNameElement) {
+          userNameElement.textContent = response.data.name;
+        }
+      } else {
+        this.clearUserName();
+      }
+    });
+  }
+  
+  clearUserName() {
+    const userNameElement = this.element.querySelector(".user-name");
+    if (userNameElement) {
+      userNameElement.textContent = "";
+    }
   }
 }
