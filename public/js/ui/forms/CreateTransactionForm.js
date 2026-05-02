@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 /**
  * Класс CreateTransactionForm управляет формой
  * создания новой транзакции
@@ -8,7 +10,8 @@ class CreateTransactionForm extends AsyncForm {
    * метод renderAccountsList
    * */
   constructor(element) {
-    super(element)
+    super(element);
+    this.renderAccountsList();
   }
 
   /**
@@ -16,7 +19,24 @@ class CreateTransactionForm extends AsyncForm {
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
+    Account.list().then(response => {
+      if (response.success && response.data) {
+        const selectElement = this.element.querySelector('select[name="account_id"]');
+        
+        if (selectElement) {
+          selectElement.innerHTML = "";
 
+          response.data.forEach(account => {
+            const option = document.createElement("option");
+            option.value = account.id;
+            option.textContent = account.name;
+            selectElement.appendChild(option);
+          });
+        }
+      } else {
+        console.error("Ошибка загрузки счетов");
+      }
+    });
   }
 
   /**
@@ -26,6 +46,19 @@ class CreateTransactionForm extends AsyncForm {
    * в котором находится форма
    * */
   onSubmit(data) {
+    Transaction.create(data).then(response => {
+      if (response.success) {
+        this.element.reset();
 
+        const modal = this.element.closest(".modal");
+        if (modal) {
+          modal.classList.remove("");
+        }
+
+        App.update();
+      } else {
+        console.error("Ошибка создания транзакции");
+      }
+    });
   }
 }
