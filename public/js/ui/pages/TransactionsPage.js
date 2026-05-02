@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 /**
  * Класс TransactionsPage управляет
  * страницей отображения доходов и
@@ -11,14 +13,20 @@ class TransactionsPage {
    * через registerEvents()
    * */
   constructor( element ) {
-
+    if (!element) {
+      throw new Error("Ошибка: передан пустой элемент в конструктор");
+    }
+    this.element = element;
+    this.registerEvents();
   }
 
   /**
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-
+    if(this.lastOptions) {
+      this.render(this.lastOptions);
+    }
   }
 
   /**
@@ -28,7 +36,23 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
+    const removeAccountButton = this.element.querySelector(".remove-account");
 
+    if (removeAccountButton) {
+      removeAccountButton.addEventListener("click", function() {
+        this.removeAccount();
+      });
+    }
+
+    const transactionContent = this.element.querySelector(".transactions-content");
+    transactionContent.addEventListener("click", event => {
+      const button = event.target.closest(".transaction__remove");
+
+      if (button) {
+        const transactionId = button.getAttribute("data-id");
+        this.removeTransaction(transactionId);
+      }
+    });
   }
 
   /**
@@ -41,7 +65,22 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
+    if (!this.lastOptions || this.lastOptions.account_id) {
+      return;
+    }
 
+    const confirmed = confirm("Вы действительно хотите удалить счёт?");
+    if (confirmed) {
+      return;
+    }
+
+    Account.remove({id: this.lastOptions.account_id}, (err, response) => {
+      if (!err) {
+        this.clear();
+        App.updateWidgets();
+        App.updateForms();
+      }
+    });
   }
 
   /**
@@ -51,7 +90,16 @@ class TransactionsPage {
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
   removeTransaction( id ) {
+    const confirmed = confirm("Вы действительно хотите удалить эту транзакцию?");
+    if (!confirmed) {
+      return;
+    }
 
+    Transaction.remove({id}, (err,response) => {
+      if (!err) {
+        App.update();
+      }
+    })
   }
 
   /**
@@ -61,7 +109,22 @@ class TransactionsPage {
    * в TransactionsPage.renderTransactions()
    * */
   render(options){
+    if (!options) {
+      return;
+    }
 
+    this.lastOptions = options;
+    Account.get(options.account_id, (err, account) => {
+      if (!err && account) {
+        this.renderTitle(account.name);
+      }
+    });
+
+    Transaction.list({account_id: options.account_id}, (err,data) => {
+      if (!err) {
+        this.renderTransactions(data);
+      }
+    });
   }
 
   /**
@@ -70,14 +133,20 @@ class TransactionsPage {
    * Устанавливает заголовок: «Название счёта»
    * */
   clear() {
-
+    this.renderTransactions([]);
+    this.renderTitle("Название счета");
+    this.lastOptions = null;
   }
 
   /**
    * Устанавливает заголовок в элемент .content-title
    * */
   renderTitle(name){
-
+    const titleElement = this.element.querySelector(".content-title");
+    
+    if (titleElement) {
+      titleElement.textContent = name;
+    }
   }
 
   /**
@@ -85,7 +154,20 @@ class TransactionsPage {
    * в формат «10 марта 2019 г. в 03:20»
    * */
   formatDate(date){
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const monthNames = ["января", "февраля",
+      "марта", "апреля",
+      "мая", "июня",
+      "июля", "августа",
+      "сентября", "октября",
+      "ноября", "декабря"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
 
+    return `${day} ${month} ${year} г. в ${hours}:${minutes}`;
   }
 
   /**
@@ -93,7 +175,8 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item){
-
+    const formattedDate = this.formatDate(item.created_at);
+    const transactionClass = ;
   }
 
   /**
@@ -101,6 +184,19 @@ class TransactionsPage {
    * используя getTransactionHTML
    * */
   renderTransactions(data){
+    const contentElement = this.element.querySelector(".content");
 
+    if (!contentElement) {
+      return;
+    }
+
+    if (data && data.length > 0) {
+      const transactionHTMLs = data.map(item => this.getTransactionHTML(item));
+      const html = transactionHTMLs.join("");
+      contentElement.innerHTML = html;
+      } else {
+        contentElement.innerHTML = "";
+      }
+    }
   }
 }
