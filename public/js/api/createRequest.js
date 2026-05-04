@@ -6,20 +6,31 @@ function createRequest(options) {
     const method = options.method;
     const callback = options.callback;
 
-    if (method === "GET" && Object.keys(data).length > 0) {
-    } else {
+    let requestUrl = url;
+    let requestData = null;
 
+    if (method === "GET" && Object.keys(data).length > 0) {
+        const queryParams = new URLSearchParams(data);
+    } else {
+        requestData = new FormData();
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                requestData.append(key, data[key]);
+            }
+        }
     }
     
-    xhr.open(method, url);
+    xhr.open(method, requestUrl);
     xhr.responseType = "json";
 
     xhr.onload = function() {
         if (xhr.status >= 200 && xhr.status < 300) {
-            callback(xhr.response);
+            callback(null, xhr.response);
         } else {
             const error = new Error(`HTTP error! status: &{xhr.status}`);
-            callback(error);
+            callback(error, null);
         }
     }
+
+    xhr.send(requestData);
 }
