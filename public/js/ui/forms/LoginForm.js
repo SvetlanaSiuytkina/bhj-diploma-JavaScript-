@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 /**
  * Класс LoginForm управляет формой
  * входа в портал
@@ -12,7 +10,7 @@ class LoginForm extends AsyncForm {
    * закрывает окно, в котором находится форма
    * */
   onSubmit(data) {
-    User.login(data).then(response => {
+    User.login(data,(err, response) => {
       if (response.success) {
         this.element.reset();
         App.setState("user-logged");
@@ -24,6 +22,11 @@ class LoginForm extends AsyncForm {
         }
       } else {
         console.error("Ошибка авторизации");
+      }
+      
+      if (err) {
+        console.error("Ошибка авторизации:", err);
+        return;
       }
     });
   }

@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 /**
  * Класс TransactionsPage управляет
  * страницей отображения доходов и

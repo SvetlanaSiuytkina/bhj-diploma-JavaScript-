@@ -3,9 +3,6 @@
  * отображение информации о имени пользователя
  * после авторизации или его выхода из системы
  * */
-
-const { response } = require("express");
-
 class UserWidget {
   /**
    * Устанавливает полученный элемент
@@ -28,7 +25,7 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update() {
-    User.current().then(response => {
+    User.current((err, response) => {
       if (response.success && response.data) {
         const userNameElement = this.element.querySelector(".user-name");
 

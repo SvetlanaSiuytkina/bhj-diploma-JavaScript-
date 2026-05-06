@@ -2,9 +2,6 @@
  * Класс AccountsWidget управляет блоком
  * отображения счетов в боковой колонке
  * */
-
-const { response } = require("express");
-
 class AccountsWidget {
   /**
    * Устанавливает текущий элемент в свойство element
@@ -62,7 +59,7 @@ class AccountsWidget {
    * метода renderItems()
    * */
   update() {
-    User.current().then(response => {
+    User.current((err, response) => {
       if (response.success) {
         Account.list().then(accountsResponse => {
           if (accountsResponse.success) {

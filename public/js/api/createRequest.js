@@ -11,6 +11,7 @@ function createRequest(options) {
 
     if (method === "GET" && Object.keys(data).length > 0) {
         const queryParams = new URLSearchParams(data);
+        requestUrl = `${url}?${queryParams.toString()}`;         //
     } else {
         requestData = new FormData();
         for (const key in data) {
@@ -27,7 +28,7 @@ function createRequest(options) {
         if (xhr.status >= 200 && xhr.status < 300) {
             callback(null, xhr.response);
         } else {
-            const error = new Error(`HTTP error! status: &{xhr.status}`);
+            const error = new Error(`HTTP error! status: ${xhr.status}`);
             callback(error, null);
         }
     }
