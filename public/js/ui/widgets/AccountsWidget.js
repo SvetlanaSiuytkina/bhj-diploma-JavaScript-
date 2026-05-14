@@ -61,7 +61,7 @@ class AccountsWidget {
   update() {
     User.current((err, response) => {
       if (response.success) {
-        Account.list().then(accountsResponse => {
+        Account.list((err, accountsResponse) => {
           if (accountsResponse.success) {
             this.clear();
             this.renderItems(accountsResponse.data);

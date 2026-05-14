@@ -37,21 +37,25 @@ class TransactionsPage {
     const removeAccountButton = this.element.querySelector(".remove-account");
 
     if (removeAccountButton) {
-      removeAccountButton.addEventListener("click", function() {
+      removeAccountButton.addEventListener("click", () => {
         this.removeAccount();
       });
     }
 
     const transactionContent = this.element.querySelector(".transactions-content");
-    transactionContent.addEventListener("click", event => {
+    
+    if (transactionContent) {
+      transactionContent.addEventListener("click", event => {
       const button = event.target.closest(".transaction__remove");
-
+      
       if (button) {
         const transactionId = button.getAttribute("data-id");
         this.removeTransaction(transactionId);
       }
     });
   }
+  }
+
 
   /**
    * Удаляет счёт. Необходимо показать диаголовое окно (с помощью confirm())
@@ -68,7 +72,7 @@ class TransactionsPage {
     }
 
     const confirmed = confirm("Вы действительно хотите удалить счёт?");
-    if (confirmed) {
+    if (!confirmed) {
       return;
     }
 
@@ -77,6 +81,8 @@ class TransactionsPage {
         this.clear();
         App.updateWidgets();
         App.updateForms();
+      } else {
+        console.error("Ошибка при удалении счета: ", err)
       }
     });
   }
@@ -93,11 +99,13 @@ class TransactionsPage {
       return;
     }
 
-    Transaction.remove({id}, (err,response) => {
+    Transaction.remove({id: id}, (err,response) => {
       if (!err) {
         App.update();
+      } else {
+        console.error("Ошибка при удалении транзакции: ", err)
       }
-    })
+    });
   }
 
   /**
@@ -115,12 +123,17 @@ class TransactionsPage {
     Account.get(options.account_id, (err, account) => {
       if (!err && account) {
         this.renderTitle(account.name);
+      } else {
+        console.error("Ошибка при получении данных счета: ", err)
       }
     });
 
     Transaction.list({account_id: options.account_id}, (err,data) => {
       if (!err) {
         this.renderTransactions(data);
+      } else {
+        console.error("Ошибка при получении списка транзакций: ", err);
+        this.renderTransactions([]);
       }
     });
   }
@@ -151,7 +164,7 @@ class TransactionsPage {
    * Форматирует дату в формате 2019-03-10 03:20:41 (строка)
    * в формат «10 марта 2019 г. в 03:20»
    * */
-  formatDate(date){
+  formatDate(dateString){
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, "0");
     const monthNames = ["января", "февраля",
@@ -174,7 +187,17 @@ class TransactionsPage {
    * */
   getTransactionHTML(item){
     const formattedDate = this.formatDate(item.created_at);
-    const transactionClass = ;
+    const transactionClass = item.type === 'income' ? 'transaction--income' : 'transaction--expense';
+    const typeText = item.type === 'income' ? 'Доход' : 'Расход';
+
+    return `<div class="transaction ${transactionClass}">
+      <div class="transaction__info">
+        <div class="transaction__type">${typeText}</div>
+        <div class="transaction__date">${formattedDate}</div>
+      </div>
+      <div class="transaction__amount">${item.sum} руб.</div>
+      <button class="transaction__remove" data-id="${item.id}">×</button>
+    </div>`;
   }
 
   /**
@@ -193,8 +216,7 @@ class TransactionsPage {
       const html = transactionHTMLs.join("");
       contentElement.innerHTML = html;
       } else {
-        contentElement.innerHTML = "";
+        contentElement.innerHTML = "<div class='no-transactions'>Транзакций нет</div>";
       }
     }
   }
-}

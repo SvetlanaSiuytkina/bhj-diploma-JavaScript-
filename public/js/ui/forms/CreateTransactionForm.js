@@ -18,30 +18,36 @@ class CreateTransactionForm extends AsyncForm {
    * */
   renderAccountsList() {
     Account.list({}, (err, response) => {
-      if (response.success && response.data) {
-        const selectElement = this.element.querySelector('select[name="account_id"]');
-        
-        if (selectElement) {
-          selectElement.innerHTML = "";
-
-          response.data.forEach(account => {
-            const option = document.createElement("option");
-            option.value = account.id;
-            option.textContent = account.name;
-            selectElement.appendChild(option);
-          });
-        }
-      } else {
-        console.error("Ошибка загрузки счетов");
-      }
-      
       if (err) {
-        console.error("Ошибка загрузки счетов:", err);
+        console.error("Ошибка загрузки счетов", err);
         return;
       }
+      
+      const selectElement = this.element.querySelector('select[name="account_id"]');
+      
+      if (!selectElement) {
+        console.error("Элемент select для счетов не найден");
+        return;
+      }
+      
+      selectElement.innerHTML = "";
+
+      if (response.data.length === 0) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Нет доступных счетов";
+        selectElement.appendChild(option);
+        return;
+      }
+      
+      response.data.forEach(account => {
+        const option = document.createElement("option");
+        option.value = account.id;
+        option.textContent = account.name;
+        selectElement.appendChild(option);
+      });
     });
   }
-
   /**
    * Создаёт новую транзакцию (доход или расход)
    * с помощью Transaction.create. По успешному результату

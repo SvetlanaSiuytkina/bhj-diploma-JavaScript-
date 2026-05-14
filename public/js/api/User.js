@@ -36,22 +36,26 @@ class User {
    * */
   static fetch(callback) {
     createRequest({
-      url: `${this.URL} + "/current"`,
+      url: `${this.URL}/current"`,
       method: "GET",
       callback: (err, response) => {
         if (err) {
+          console.error("Ошибка загрузки пользователя: ", err);
           callback(err, response);
-        } else if (response.success) {
-          this.setCurrent(response.user);
-          callback(null, response);
-        } else {
-          this.unsetCurrent();
-          callback(null, response);
+          return;
         }
+
+        if (!response || !response.success) {
+          this.unsetCurrent();
+          callback(null, {success: false, error: "Пользователь не авторизован"});
+          return;
+        }
+
+        this.setCurrent(response.user);
+        callback(null, response);
       }
     });
   }
-
   /**
    * Производит попытку авторизации.
    * После успешной авторизации необходимо
@@ -60,12 +64,17 @@ class User {
    * */
   static login(data, callback) {
     createRequest({
-      url: this.URL + '/login',
+      url: `${this.URL}/login`,
       method: 'POST',
       responseType: 'json',
       data: data,
       callback: (err, response) => {
-        if (response && response.user) {
+        if (err) {
+          callback(err, response);
+          return;
+        }
+
+        if (response && response.success && response.user) {
           this.setCurrent(response.user);
         }
         callback(err, response);
@@ -81,11 +90,16 @@ class User {
    * */
   static register(data, callback) {
     createRequest({
-      url: `${this.URL} + "/register"`,
+      url: `${this.URL}/register`,
       method: "POST",
       data: data,
       callback: (err, response) => {
-        if (!err && response.success) {
+        if (err) {
+          callback(err, response);
+          return;
+        }
+        
+        if (response && response.success && response.user) {
           this.setCurrent(response.user);
         }
         callback(err, response);
@@ -99,8 +113,12 @@ class User {
    * */
   static logout(callback) {
     createRequest({
-      url: `${this.URL} + "logout"`,
-      method: "POST"
+      url: `${this.URL}/logout"`,
+      method: "POST",
+      callback: (err, response) => {
+        this.unsetCurrent();
+        callback(err, response);
+      }
     });
   }
 }
