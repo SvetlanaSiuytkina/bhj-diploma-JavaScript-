@@ -36,7 +36,7 @@ class User {
    * */
   static fetch(callback) {
     createRequest({
-      url: `${this.URL}/current"`,
+      url: `${this.URL}/current`,
       method: "GET",
       callback: (err, response) => {
         if (err) {
@@ -113,7 +113,7 @@ class User {
    * */
   static logout(callback) {
     createRequest({
-      url: `${this.URL}/logout"`,
+      url: `${this.URL}/logout`,
       method: "POST",
       callback: (err, response) => {
         this.unsetCurrent();

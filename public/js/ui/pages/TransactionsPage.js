@@ -67,7 +67,8 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-    if (!this.lastOptions || this.lastOptions.account_id) {
+    if (!this.lastOptions || !this.lastOptions.account_id) {
+      console.error("ID счета для удаления не указан");
       return;
     }
 

@@ -25,17 +25,16 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update() {
-    User.current((err, response) => {
-      if (response.success && response.data) {
-        const userNameElement = this.element.querySelector(".user-name");
-
-        if (userNameElement) {
-          userNameElement.textContent = response.data.name;
-        }
-      } else {
-        this.clearUserName();
+    const currentUser = User.current();
+    if (currentUser) {
+      const userNameElement = this.element.querySelector(".user-name");
+      
+      if (userNameElement) {
+        userNameElement.textContent = currentUser.name;
       }
-    });
+    } else {
+      this.clearUserName();
+    }
   }
   
   clearUserName() {

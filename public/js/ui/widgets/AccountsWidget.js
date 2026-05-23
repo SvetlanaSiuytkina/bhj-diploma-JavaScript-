@@ -59,14 +59,18 @@ class AccountsWidget {
    * метода renderItems()
    * */
   update() {
-    User.current((err, response) => {
-      if (response.success) {
-        Account.list((err, accountsResponse) => {
-          if (accountsResponse.success) {
-            this.clear();
-            this.renderItems(accountsResponse.data);
-          }
-        });
+    const currentUser = User.current();
+    if (!currentUser) {
+      console.error("Пользователь не авторизован");
+      return;
+    }
+    
+    Account.list({}, (err, accountsResponse) => {
+      if (!err && accountsResponse && accountsResponse.success) {
+        this.clear();
+        this.renderItems(accountsResponse.data);
+      } else {
+        console.error("Ошибка загрузки счетов");
       }
     });
   }
@@ -105,7 +109,14 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
-    
+    return `
+    <li class="account" data-id="${item.id}">
+      <a href="#">
+        <span>${item.name}</span> /
+        <span>${item.sum} ₽</span>
+      </a>
+    </li>
+    `
   }
 
   /**

@@ -23,6 +23,11 @@ class CreateTransactionForm extends AsyncForm {
         return;
       }
       
+      if (!response || !response.data) {
+        console.error("Данные о счетах отсутствуют");
+        return;
+      }
+
       const selectElement = this.element.querySelector('select[name="account_id"]');
       
       if (!selectElement) {
@@ -32,7 +37,7 @@ class CreateTransactionForm extends AsyncForm {
       
       selectElement.innerHTML = "";
 
-      if (response.data.length === 0) {
+      if(!Array.isArray(response.data) || response.data.length === 0) {
         const option = document.createElement("option");
         option.value = "";
         option.textContent = "Нет доступных счетов";
@@ -56,22 +61,25 @@ class CreateTransactionForm extends AsyncForm {
    * */
   onSubmit(data) {
     Transaction.create(data, (err, response) => {
+      if (err) {
+        console.error("Ошибка создания транзакции:", err);
+        return;
+      }
+      
       if (response.success) {
         this.element.reset();
 
         const modal = this.element.closest(".modal");
         if (modal) {
-          modal.classList.remove("");
+          const modalInstance = App.getModalByElement(modal);
+          if (modalInstance) {
+            modalInstance.close();
+          }
         }
-
+        
         App.update();
       } else {
         console.error("Ошибка создания транзакции");
-      }
-      
-      if (err) {
-        console.error("Ошибка создания транзакции:", err);
-        return;
       }
     });
   }

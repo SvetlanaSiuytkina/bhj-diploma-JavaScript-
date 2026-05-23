@@ -5,6 +5,18 @@
       "email": "demo@demo",
       "password": "demo",
       "id": "1"
+    },
+    {
+      "name": "светлана",
+      "email": "svetadan1234@mail.ru",
+      "password": "111111",
+      "id": "9la12ccmpihwocu"
+    },
+    {
+      "name": "светлана",
+      "email": "svetadan12345@mail.ru",
+      "password": "1111",
+      "id": "9la131wmpihxlns"
     }
   ],
   "accounts": [
