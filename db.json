@@ -17,6 +17,12 @@
       "email": "svetadan12345@mail.ru",
       "password": "1111",
       "id": "9la131wmpihxlns"
+    },
+    {
+      "name": "Vlad",
+      "email": "test@test.ru",
+      "password": "abracadabra",
+      "id": "9la1bl0mpiimnt8"
     }
   ],
   "accounts": [
