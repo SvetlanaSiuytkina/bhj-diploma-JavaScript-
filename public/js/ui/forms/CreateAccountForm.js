@@ -17,7 +17,7 @@ class CreateAccountForm extends AsyncForm {
       }
       
       if (response.success) {
-        const modal = App.getModal("new-account");
+        const modal = App.getModal("createAccount");
         console.log("Модальное окно найдено:", modal);
 
         if (modal) {
