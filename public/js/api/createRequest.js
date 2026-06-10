@@ -15,7 +15,7 @@ function createRequest(options) {
 
     if (method === "GET" && Object.keys(data).length > 0) {
         const queryParams = new URLSearchParams(data);
-        requestUrl = `${url}${queryParams.toString()}`;         //
+        requestUrl = `${url}?${queryParams.toString()}`;         //
     } else {
         requestData = new FormData();
         for (const key in data) {
