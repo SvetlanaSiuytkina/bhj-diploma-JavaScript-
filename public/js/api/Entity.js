@@ -39,9 +39,11 @@ class Entity {
    * */
   static remove(data, callback ) {
     createRequest({
-      url: `${this.URL}/${data.id}`,
+      url: this.URL,  //`${this.URL}/${data.id}`
       method: "DELETE",
-      data: data,
+      data: {
+        id: data.id
+      },
       callback: callback
     });
   }
