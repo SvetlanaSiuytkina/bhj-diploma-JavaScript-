@@ -94,7 +94,7 @@ class TransactionsPage {
    * По удалению транзакции вызовите метод App.update(),
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
-  removeTransaction( id ) {
+  removeTransaction(id) {
     const confirmed = confirm("Вы действительно хотите удалить эту транзакцию?");
     if (!confirmed) {
       return;
@@ -121,24 +121,32 @@ class TransactionsPage {
     }
 
     this.lastOptions = options;
-    Account.get(options.account_id, (err, account) => {
-      if (!err && account) {
-        this.renderTitle(account.name);
-      } else {
-        console.error("Ошибка при получении данных счета: ", err)
-      }
-    });
 
-    Transaction.list({account_id: options.account_id}, (err,data) => {
-      if (!err) {
-        this.renderTransactions(data);
-      } else {
-        console.error("Ошибка при получении списка транзакций: ", err);
-        this.renderTransactions([]);
+    Account.get(options.account_id, (err, account) => {
+      if (err || !account) {
+        console.error("Ошибка при получении данных счёта:", err, "Account ID:", options.account_id);
+        this.renderTitle("Неизвестный счёт");
+        return;
       }
+    
+      this.renderTitle(`Транзакции счёта: ${account.name}`);
+    
+      Transaction.list({account_id: options.account_id}, (err, response) => {
+        if (err) {
+          console.error("Ошибка при получении списка транзакций: ", err);
+          this.renderTransactions([]);
+          return;
+        }
+
+        if (response && response.data) {
+          this.renderTransactions(response.data);
+        } else {
+          this.renderTransactions([]);
+        }
+      });
     });
   }
-
+        
   /**
    * Очищает страницу. Вызывает
    * TransactionsPage.renderTransactions() с пустым массивом.

@@ -192,6 +192,141 @@
       "sum": 300000,
       "type": "expense",
       "user_id": "1"
+    },
+    {
+      "id": "9la15s0mq9afido",
+      "type": "income",
+      "name": "заначка",
+      "sum": 50000,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:21:06.251Z"
+    },
+    {
+      "id": "9la15e4mq9agkyr",
+      "type": "expense",
+      "name": "demo",
+      "sum": 50000,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:21:56.258Z"
+    },
+    {
+      "id": "9la18f0mq9agwbl",
+      "type": "expense",
+      "name": "demo",
+      "sum": 50000,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:22:10.976Z"
+    },
+    {
+      "id": "9la11dwmq9aind0",
+      "type": "income",
+      "name": "demo",
+      "sum": 510000,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:23:32.675Z"
+    },
+    {
+      "id": "9la1744mq9aj8nf",
+      "type": "income",
+      "name": "сбер",
+      "sum": 5,
+      "account_id": "9la1298mq9841dz",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:24:00.266Z"
+    },
+    {
+      "id": "9la1a6omq9ajmes",
+      "type": "expense",
+      "name": "сбер",
+      "sum": 2,
+      "account_id": "9la1298mq9841dz",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:24:18.099Z"
+    },
+    {
+      "id": "9la19ycmq9alq8h",
+      "type": "income",
+      "name": "demo",
+      "sum": 2,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:25:56.368Z"
+    },
+    {
+      "id": "9la1a2cmq9aoy5l",
+      "type": "income",
+      "name": "sss",
+      "sum": 2,
+      "account_id": "9la1298mq9841dz",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:28:26.600Z"
+    },
+    {
+      "id": "9la13ogmq9ap89v",
+      "type": "income",
+      "name": "demo",
+      "sum": 2,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:28:39.714Z"
+    },
+    {
+      "id": "9la12t8mq9ar66o",
+      "type": "expense",
+      "name": "demo",
+      "sum": 2,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:30:10.319Z"
+    },
+    {
+      "id": "9la1a8wmq9arqte",
+      "type": "income",
+      "name": "demo",
+      "sum": 7,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:30:37.057Z"
+    },
+    {
+      "id": "9la18somq9aw43o",
+      "type": "income",
+      "name": "demo",
+      "sum": 2,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:34:00.899Z"
+    },
+    {
+      "id": "9la11okmq9awb47",
+      "type": "expense",
+      "name": "demo",
+      "sum": 5,
+      "account_id": "9la15lomq7yi0i5",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:34:09.990Z"
+    },
+    {
+      "id": "9la154wmq9bbona",
+      "type": "income",
+      "name": "sss",
+      "sum": 2,
+      "account_id": "9la1298mq9841dz",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:46:07.365Z"
+    },
+    {
+      "id": "9la156smq9bbvwp",
+      "type": "expense",
+      "name": "sss",
+      "sum": 2,
+      "account_id": "9la1298mq9841dz",
+      "user_id": "9la1bl0mpiimnt8",
+      "created_at": "2026-06-11T09:46:16.777Z"
     }
   ]
 }
